@@ -1,0 +1,12 @@
+.mainDiv{
+    padding:10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.blogDiv{
+    width: fit-content;
+    border: 1px solid;
+    border-radius: 5px;
+    gap:10px
+}
