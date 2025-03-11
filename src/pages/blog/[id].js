@@ -16,16 +16,47 @@ export default function BlogPost({ post }) {
 }
 
 
-export async function getServerSideProps(context) {
-  const { params } = context; 
-  const res = await fetch(`https://dummyjson.com/todos/${params.id}`);
-  const data = await res.json();
+// export async function getServerSideProps(context) {
+//   const { params } = context; 
+//   console.log(context)
+//   const res = await fetch(`https://dummyjson.com/todos/${params.id}`);
+//   const data = await res.json();
 
-  if (!data || !data.id) { 
-    return { notFound: true };
-  }
+//   if (!data || !data.id) { 
+//     return { notFound: true };
+//   }
 
-  return {
-    props: { post: data }, 
-  };
+//   return {
+//     props: { post: data }, 
+//   };
+// }
+export async function getStaticPaths(){
+    const res = await fetch("http://localhost:3000/api/todo");
+    const data = await res.json();
+    
+    const paths=data.todos.map((todo)=>({
+        params:{id:todo.id.toString()}
+    }))
+   // console.log(paths)
+
+    return{
+        paths,
+        fallback:"blocking"
+    }
 }
+
+export async function getStaticProps(context) {
+    const { params } = context; 
+   // console.log(context)
+    const res = await fetch(`http://localhost:3000/api/todo?id=${params.id}`);
+    const data = await res.json();
+  
+    if (!data || !data.id) { 
+      return { notFound: true };
+    }
+  
+    return {
+      props: { post: data }, 
+    };
+  }
+  
